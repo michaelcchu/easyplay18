@@ -1,4 +1,4 @@
-# easyplay17
+# easyplay18
 
 play music by pressing keys on the keyboard (or tapping the screen).
 
