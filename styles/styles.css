@@ -1,0 +1,21 @@
+.top {grid-area: top;}
+.middle {grid-area: middle;}
+.bottom {grid-area: bottom;}
+.footer {
+    grid-area: footer; 
+    background-color: #EBEBEB;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-areas:
+        "top"
+        "middle"
+        "bottom"
+        "footer";
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-columns: auto;
+    grid-gap: 8px;
+}
