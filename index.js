@@ -9,13 +9,32 @@ const reader = new FileReader();
 let activePress; let chords = []; let index; let midi; let notes; 
 let on = false; let press; let ticks = []; let tuning;
 
+let notesPlaying = [];
+
 function byId(id) {return document.getElementById(id);};
 
-function setChord(i, gain) {
+// stops all notes that finished before or at the index i chord
+function stopNotes(i) {
+  const chord = chords[i];
+  const time = chord[0].ticks;
+  const updatedNotesPlaying = [];
+  for (let note of notesPlaying) {
+    if (note.ticks + note.durationTicks <= time) {
+      gainNodes[note.midi].gain.setTargetAtTime(0,
+        audioContext.currentTime, 0.015);
+    } else {
+      updatedNotesPlaying.push(note);
+    }
+  }
+  notesPlaying = updatedNotesPlaying;
+}
+
+function startChord(i) {
   const chord = chords[i];
   for (let note of chord) {
-    gainNodes[note.midi].gain.setTargetAtTime(gain,
+    gainNodes[note.midi].gain.setTargetAtTime(normalGain,
       audioContext.currentTime, 0.015);
+    notesPlaying.push(note);
   }  
 }
 
@@ -44,16 +63,18 @@ function key(e) {
     if (on && !badKeys.some(badKey => strPress.includes(badKey)) && !e.repeat
       && (index < chords.length) && (press !== activePress)) {
         if (index > 0) {
-          setChord(index-1, 0); // turn the old oscillators off
+          stopNotes(index); // turn the old oscillators off
         }
-        setChord(index, normalGain); // turn the new oscillators on
+        startChord(index, normalGain); // turn the new oscillators on
         activePress = press; index++;
     }
   }
 
   function up() {
     if (on && (press === activePress)) {
-        setChord(index-1, 0); // turn the old oscillators off
+        startChord(index-1); // turn the old oscillators off
+        // only turn the old oscillators off IF
+        // the 
         activePress = null;
     }
   }
