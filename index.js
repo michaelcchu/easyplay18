@@ -22,11 +22,20 @@ function stopNotes(i) {
   } else {
     time = Infinity;
   }
-  const updatedNotesPlaying = [];
+  const updatedNotesPlaying = [];  
   for (let note of notesPlaying) {
     if (note.ticks + note.durationTicks <= time) {
-      gainNodes[note.midi].gain.setTargetAtTime(0,
-        audioContext.currentTime, 0.015);
+        let stop = true;
+        for (let otherNote of notesPlaying) {
+          if ((note.midi === otherNote.midi) &&
+          (otherNote.ticks + otherNote.durationTicks > time)) {
+            stop = false;
+          }
+        }
+        if (stop) {
+          gainNodes[note.midi].gain.setTargetAtTime(0,
+            audioContext.currentTime, 0.015);      
+        }
     } else {
       updatedNotesPlaying.push(note);
     }
@@ -87,6 +96,7 @@ function key(e) {
 
 function resetVars() {
     activePress = null; index = 0; 
+    notesPlaying = [];
     for (let gainNode of gainNodes) {gainNode.gain.value = 0;}
 }
 
