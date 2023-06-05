@@ -15,8 +15,13 @@ function byId(id) {return document.getElementById(id);};
 
 // stops all notes that finished before or at the index i chord
 function stopNotes(i) {
-  const chord = chords[i];
-  const time = chord[0].ticks;
+  let time;
+  if (i < chords.length) {
+    const chord = chords[i];
+    time = chord[0].ticks;
+  } else {
+    time = Infinity;
+  }
   const updatedNotesPlaying = [];
   for (let note of notesPlaying) {
     if (note.ticks + note.durationTicks <= time) {
@@ -62,9 +67,7 @@ function key(e) {
         "Play","Tab"];
     if (on && !badKeys.some(badKey => strPress.includes(badKey)) && !e.repeat
       && (index < chords.length) && (press !== activePress)) {
-        if (index > 0) {
-          stopNotes(index); // turn the old oscillators off
-        }
+        stopNotes(index); // turn the old oscillators off
         startChord(index, normalGain); // turn the new oscillators on
         activePress = press; index++;
     }
@@ -72,10 +75,8 @@ function key(e) {
 
   function up() {
     if (on && (press === activePress)) {
-        startChord(index-1); // turn the old oscillators off
-        // only turn the old oscillators off IF
-        // the 
-        activePress = null;
+      stopNotes(index); // turn the old oscillators off
+      activePress = null;
     }
   }
 
