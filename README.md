@@ -1,5 +1,8 @@
 # easyplay18
 
+Note: if you are on phone or tablet, make sure your ringer is on / 
+you are not on silent mode!
+
 play music by pressing keys on the keyboard (or tapping the screen).
 
 choose any midi file.
