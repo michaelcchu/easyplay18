@@ -98,7 +98,7 @@ function start() {
 // Add Chorale options
 let optgroup = document.createElement("optgroup");
 optgroup.label = "Chorales";
-for (let i = 253; i <= 438; i++) {
+for (let i = 1; i <= 371; i++) {
     const option = document.createElement("option");
     option.text = i; optgroup.append(option);
 }
@@ -115,15 +115,12 @@ function loadMusic() {
   let url;
 
   if (optgroup === "Chorales") {
-      url = "https://proxy.cors.sh/"
-       + "https://www.tobis-notenarchiv.de/bach/07-Choraele/02-Vierstimmig/"
-       + "BWV_0" + number + ".mid"
-      //number = ("00" + number).slice(-3);
-      //url = "https://kern.humdrum.org/cgi-bin/ksdata?file=chor"
-      //+ number + ".krn&l=users/craig/classical/bach/371chorales&format=midi";
+      number = ("00" + number).slice(-3);
+      url = "https://kern.humdrum.org/cgi-bin/ksdata?file=chor"
+      + number + ".krn&l=users/craig/classical/bach/371chorales&format=midi";
   }
 
-  fetch(url, {mode: "no-cors"})
+  fetch(url)
   .then( response => response.arrayBuffer())
   .then( data => {setup(data);})
   .catch( e => {console.log( e );} );
